@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tyy.dao.Bill.BillMapper">
+    <select id="queryAllBillById" resultType="com.tyy.pojo.User.Bill">
+        select * from tyydemo1.bill
+        where UserId = #{UserId}
+    </select>
+
+    <insert id="addNewBill" parameterType="map">
+        insert into tyydemo1.bill (UserId, Title, Time, Sum) values (#{UserId},#{Title},#{Time},#{0});
+    </insert>
+
+    <insert id="addNewBillItem" parameterType="com.tyy.pojo.User.BillItem">
+        insert into tyydemo1.billitem (BillId, ItemType, Cost, Info, CostTime)
+        values (#{BillId},#{ItemType},#{Cost},#{Info},#{CostTime});
+    </insert>
+
+    <select id="queryAllBillItemById" resultType="com.tyy.pojo.User.BillItem">
+        select * from tyydemo1.billitem
+        where BillId = #{BillId}
+    </select>
+
+    <delete id="deleteBillItemById">
+        delete from tyydemo1.billitem
+        where Id = #{Id};
+    </delete>
+
+    <update id="updateBillItem" parameterType="map">
+        update  tyydemo1.billitem
+        <set>
+            <if test="ItemType!= null">ItemType=#{ItemType},</if>
+            <if test="Cost != null">Cost=#{Cost},</if>
+            <if test="Info != null">Info=#{Info},</if>
+            <if test="CostTime != null">CostTime=#{CostTime}</if>
+        </set>
+        <where>
+            Id = #{Id}
+        </where>
+    </update>
+
+    <select id="queryBillSum" resultType="double">
+        select SUM(Cost)
+        from tyydemo1.billitem
+        where BillId = #{BillId}
+    </select>
+
+    <update id="updateBillSum">
+        update tyydemo1.bill
+        SET Sum = #{Sum}
+        where BillId = #{BillId}
+    </update>
+
+
+
+</mapper>

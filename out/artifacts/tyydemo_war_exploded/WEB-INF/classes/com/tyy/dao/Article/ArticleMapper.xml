@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tyy.dao.Article.ArticleMapper">
+    <select id="queryArticleByNameLike" resultType="com.tyy.pojo.Article.Article">
+        select * from tyydemo1.article
+        where Title like "%"#{Title}"%"
+        limit 5
+    </select>
+
+    <select id="queryArticleById" resultType="com.tyy.pojo.Article.Article">
+        select * from tyydemo1.article
+        where ArticleId = #{ArticleId}
+    </select>
+
+    <update id="addArticleView">
+        update tyydemo1.article
+        set View = View+1
+        where ArticleId = #{ArticleId};
+    </update>
+
+    <insert id="addReview" parameterType="map">
+        insert into tyydemo1.review (UserId, ArticleId, Reviews, Time, Good)
+        values (#{UserId},#{ArticleId},#{Reviews},#{Time},#{Good});
+    </insert>
+
+    <update id="addReviewGood">
+        update tyydemo1.review
+        set Good = Good+1
+        where ReviewId = #{ReviewId};
+    </update>
+
+    <update id="addReviewNum">
+        update tyydemo1.article
+        set ReviewNum = ReviewNum+1
+        where ArticleId = #{ArticleId};
+    </update>
+
+    <insert id="addR_Review" parameterType="map">
+        insert into tyydemo1.r_review (UserId, TargetId, Reviews, Time, Good)
+        values (#{UserId},#{TargetId},#{Reviews},#{Time},#{Good});
+    </insert>
+
+    <update id="addR_ReviewGood">
+        update tyydemo1.r_review
+        set Good = Good+1
+        where ReviewId = #{ReviewId};
+    </update>
+
+    <update id="addArticleGood">
+        update tyydemo1.article
+        set Good = Good+1
+        where ArticleId = #{ArticleId};
+    </update>
+
+    <insert id="addArticle" parameterType="map">
+        insert into tyydemo1.article (UserId, Title, Content, View, Good, Collection, Share, ReviewNum, Time, BillId, Location)
+        values (#{UserId},#{Title},#{Content},#{View},#{Good},#{Collection},#{Share},#{ReviewNum},#{Time},#{BillId},#{Location});
+    </insert>
+
+    <insert id="addArticleCollect">
+        insert into tyydemo1.articlecollect (UserId, ArticleId)
+         values (#{UserId},#{ArticleId});
+    </insert>
+
+    <update id="addArticleCollection">
+        update tyydemo1.article
+        set Collection = Collection+1
+        where ArticleId = #{ArticleId};
+    </update>
+
+</mapper>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tyy.dao.Initialize.InitializeMapper">
+
+    <select id="queryIsChoicelyCount" resultType="int">
+        select COUNT(Is_Choicely)
+        from tyydemo1.article
+        where Is_Choicely = 'T'
+    </select>
+
+    <!-- 根据分页数据start 和size查询数据 -->
+    <select id="initializeIsChoicelyArticleIndex" parameterType="map" resultType="Article">
+        select *
+        from tyydemo1.article
+        <where>
+            Is_Choicely = 'T'
+        </where>
+        order by Time desc
+        <if test="start!=null and size!=null">
+            limit #{start},#{size}
+        </if>
+    </select>
+
+    <select id="queryIsGoodKidCount" resultType="int">
+        select COUNT(Is_GoodKid)
+        from tyydemo1.article
+        where Is_GoodKid = 'T'
+    </select>
+
+    <!-- 根据分页数据start 和size查询数据 -->
+    <select id="initializeIsGoodKidArticleIndex" parameterType="map" resultType="Article">
+        select *
+        from tyydemo1.article
+        <where>
+            Is_GoodKid = 'T'
+        </where>
+        order by Time desc
+        <if test="start!=null and size!=null">
+            limit #{start},#{size}
+        </if>
+    </select>
+
+    <select id="queryFriendArticleCount" resultType="int">
+        select COUNT(*)
+        from tyydemo1.article,tyydemo1.friend
+        where friend.UserId = #{UserId}
+        and friend.TargetId = article.UserId
+    </select>
+
+    <!-- 根据分页数据start 和size查询数据 -->
+    <select id="initializeFriendArticleIndex" parameterType="map" resultType="Article">
+        select *
+        from tyydemo1.article,tyydemo1.friend
+        where friend.UserId = #{UserId}
+        and friend.TargetId = article.UserId
+
+        order by Time desc
+        <if test="start!=null and size!=null">
+            limit #{start},#{size}
+        </if>
+    </select>
+
+    <select id="queryAroundArticleCount" resultType="int">
+        select COUNT(*)
+        from tyydemo1.article,tyydemo1.userinfo
+        where userinfo.UserId = #{UserId}
+        and userinfo.Home = article.Location
+    </select>
+
+    <!-- 根据分页数据start 和size查询数据 -->
+    <select id="initializeAroundArticleIndex" parameterType="map" resultType="Article">
+        select *
+        from tyydemo1.article,tyydemo1.userinfo,tyydemo1.friend
+        where userinfo.UserId = #{UserId}
+        and userinfo.Home = article.Location
+
+        order by Time desc
+        <if test="start!=null and size!=null">
+            limit #{start},#{size}
+        </if>
+    </select>
+
+
+    
+
+
+</mapper>

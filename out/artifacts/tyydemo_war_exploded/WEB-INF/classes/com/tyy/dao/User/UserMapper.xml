@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tyy.dao.User.UserMapper">
+
+    <insert id="addUser" parameterType="User">
+        insert into tyydemo1.user (Phone, Name)
+        values(#{Phone},#{Name})
+    </insert>
+    
+    <update id="updateUserInfoPhone" parameterType="map">
+        update tyydemo1.userinfo
+        set Phone = #{Phone}
+        where UserId = #{UserId};
+    </update>
+
+    <update id="updateUserPhone" parameterType="map">
+        update tyydemo1.user
+        set Phone = #{Phone}
+        where UserId = #{UserId};
+    </update>
+
+
+    <select id="queryUserById" resultType="com.tyy.pojo.User.User">
+        select * from tyydemo1.user
+        where UserId = #{UserId}
+    </select>
+
+    <select id="queryUserInfoById" resultType="com.tyy.pojo.User.UserInfo">
+        select * from tyydemo1.userinfo
+        where UserId = #{UserId}
+    </select>
+
+    <select id="queryAllUser" resultType="com.tyy.pojo.User.User">
+        select * from tyydemo1.user
+    </select>
+
+    <select id="queryUserByNameLike" resultType="com.tyy.pojo.User.User">
+        select * from tyydemo1.user
+        where Name like "%"#{Name}"%"
+    </select>
+
+    <select id="queryUserInfoByNameLike" resultType="com.tyy.pojo.User.UserInfo">
+        select * from tyydemo1.userinfo
+        where Name like "%"#{Name}"%"
+        limit 5
+    </select>
+
+    <update id="updateUserType">
+      update tyydemo1.userinfo
+       set UserType = #{UserType}
+       where UserId = #{UserId}
+    </update>
+    
+    <insert id="addRelation" parameterType="map">
+        insert into tyydemo1.relation (UserId, TargetId, RelationShip) values (#{UserId},#{TargetId},#{RelationShip});
+    </insert>
+    
+    <update id="updateUserInfo" parameterType="map">
+        update  tyydemo1.userinfo
+        <set>
+            <if test="Photo != null">Photo=#{Photo},</if>
+            <if test="Name != null">Name=#{Name},</if>
+            <if test="Signature != null">Signature=#{Signature}</if>
+        </set>
+        <where>
+            UserId = #{UserId}
+        </where>
+    </update>
+
+    <update id="friendtrigger" parameterType="map">
+        update  tyydemo1.friend
+        <set>
+            <if test="Photo != null">Photo=#{Photo},</if>
+            <if test="Name != null">Name=#{Name},</if>
+            <if test="Signature != null">Signature=#{Signature}</if>
+        </set>
+        <where>
+            TargetId = #{UserId}
+        </where>
+    </update>
+
+
+    <select id="queryAllFriend" resultType="com.tyy.pojo.User.Friend">
+        select * from tyydemo1.friend
+        where  UserId = #{UserId};
+    </select>
+    
+    <insert id="createRandomCode" parameterType="com.tyy.pojo.User.PhoneCode">
+        insert into tyydemo1.phonecode (UserId, Code, Phone, Time)
+        values (#{UserId},#{Code},#{Phone},#{Time});
+    </insert>
+
+    <select id="checkingCode"  resultType="com.tyy.pojo.User.PhoneCode">
+        select * from tyydemo1.phonecode where UserId = #{UserId} and Code = #{Code}
+    </select>
+    
+    <insert id="addFriend" parameterType="map">
+        insert into tyydemo1.friend (UserId, TargetId, Note, Photo, Signature, NowScenery)
+        values (#{UserId},#{TargetId},#{Note},#{Photo},#{Signature},#{NowScenery});
+    </insert>
+
+    <select id="queryAllArticleById" resultType="com.tyy.pojo.Article.Article">
+        select * from tyydemo1.article
+        where UserId = #{UserId};
+    </select>
+
+
+    <update id="updateNewScenery">
+        update tyydemo1.userinfo
+        set NewScenery = #{NewScenery}
+        where UserId = #{UserId};
+    </update>
+
+    <select id="queryAllArticleCollectById" resultType="Article">
+        select A.* from
+         tyydemo1.articlecollect as AC,tyydemo1.article as A
+         where AC.UserId = #{UserId}
+         and AC.ArticleId = A.ArticleId
+    </select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <select id="queryArticleNumById" resultType="int">
+        select COUNT(*)
+        from tyydemo1.article
+        where UserId = #{UserId};
+    </select>
+
+    <select id="queryGoodNumById" resultType="int">
+        select SUM(Good)
+        from tyydemo1.article
+        where UserId = #{UserId};
+    </select>
+</mapper>
